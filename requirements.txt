@@ -1,0 +1,4 @@
+flask
+Flask-PyMongo
+flask-restful
+voluptuous==0.10.5

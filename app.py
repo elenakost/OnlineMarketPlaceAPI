@@ -11,7 +11,8 @@ parser.add_argument('title')
 parser.add_argument('price')
 parser.add_argument('inventory_count')
 
-class Student(Resource):
+class Item(Resource):
+    # get a product by id
     def get(self, product_id):
         try:
             validator.validateId(product_id)
@@ -26,7 +27,7 @@ class Student(Resource):
         _return.status_code = 200
         return _return      
         
-        
+    # purchase a product by id (reduce count by 1)
     def delete(self, product_id):
         try:
             validator.validateId(product_id)
@@ -40,9 +41,10 @@ class Student(Resource):
         return '', 204 
     
 class ItemList(Resource):
+    # get all items in inventory 
     def get(self):
         try:
-            items = Model.getItems() 
+            items = Model.getProducts() 
         except:
             return 'an error', 500
         if not items:
@@ -52,12 +54,12 @@ class ItemList(Resource):
             jsonlist.append(item.__dict__)
         return jsonlist, 200
         
-        
+    # add item to inventory    
     def post(self):
         args = parser.parse_args()
         try:
             validator.validateData(args)
-            item = Model.addItem(args)        
+            item = Model.addProduct(args)        
         except MultipleInvalid as e:
             return str(e), 400
         except:
@@ -66,6 +68,7 @@ class ItemList(Resource):
         _return.status_code = 201
         return _return    
 
+    # delete inventory
     def delete(self):
         try:
             deleted = Model.deleteAll()
